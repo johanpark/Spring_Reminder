@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head >
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200"
+    rel="stylesheet">
+<title>Posting</title>
+<style>
+body {
+    background-image: url('https://source.unsplash.com/1920x1080/?post');
+    background-size: cover;
+    min-height: 100vh;
+    margin: 0;
+    align-items: center;
+    animation: fadeIn.5s linear;
+}
+
+.login_container {
+    width: 380px;
+    height: 400px;
+    margin: auto;
+    border-radius: 30px;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px
+        rgba(0, 0, 0, 0.08);
+}
+</style>
+</head>
+<body class="text-center">
+    <div>
+        <div style="padding: 20px;"></div>
+        <div class="login_container">
+            <div class="form_container"
+                style="margin-left: 20px; margin-right: 20px">
+                <!-- 게시판 글 수정 -->
+                <form id="editor-form" action="/Reminder/updateProc" method="post">
+                    <div class="form_title_div">
+                        <div style="height: 10px; margin-lefr: 20px; margin-right: 20px"></div>
+                        <p class="form_title_p h3 mb-3 font-weight-normal">Posting</p>
+                    </div>
+                    <div>
+                        <div>
+                            <a>Title</a>
+                        </div>
+                        <div>
+                            <input type="text" placeholder="Title"
+                                class="form_input form-control" id="editor-title-input"
+                                name="bbsTitle" maxlength="50"
+                                th:value="${update.boardTitle}"/>
+                        </div>
+                        <div class="form_text_alert_padding">
+                            <div class="form_text_alert"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <label for="exampleFormControlTextarea1">Content</label>
+                            <textarea style="resize: none;" class="form_input form-control"
+                                id="editor-content-input" rows="6" placeholder="Enter content"
+                                name="bbsContent" maxlength="2048"
+                                th:text="${update.boardContent}"
+                                ></textarea>
+                        </div>
+                        <div class="form_text_alert_padding">
+                            <div class="form_text_alert"></div>
+                        </div>
+                    </div>
+                    <div style="height: 10px;"></div>
+                    <input type="hidden" name="boardID"
+                        th:value="${update.boardID}" />
+                    <button class="form_submit_button btn btn-lg btn-danger btn-block"
+                        type="submit">Posting</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

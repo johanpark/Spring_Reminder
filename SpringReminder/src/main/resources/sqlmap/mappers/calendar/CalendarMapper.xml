@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gsitm.career.mapper.CalendarMapper">
+<insert id="calendarInsert"
+parameterType="com.gsitm.career.dto.TodoDTO">
+<!-- 달력 이벤트 입력 -->
+INSERT INTO TODO
+VALUES (
+    #{TodoID}
+    , #{TodoStartDate}
+    , #{TodoEndDate}
+    , #{TodoContent}
+    , #{userID}
+    , 1
+    , #{userID}
+    ,NOW()
+    ,NOW()
+)
+</insert>
+
+<update id="calendarUpdate"
+parameterType="com.gsitm.career.dto.TodoDTO">
+<!-- 달력 이벤트 수정 -->
+UPDATE TODO
+SET
+TodoStartDate = #{TodoStartDate}
+, TodoEndDate = #{TodoEndDate}
+, TodoContent = #{TodoContent}
+, updateTime = NOW()
+WHERE
+TodoID = #{TodoID}
+</update>
+
+<update id="calendarDelete" parameterType="String">
+<!-- 달력 이벤트 삭제 -->
+UPDATE TODO
+SET
+modifyYN = 0
+, updateTime = NOW()
+WHERE
+TodoID = #{TodoID}
+</update>
+
+<select id="calendarList" parameterType="String"
+resultType="com.gsitm.career.dto.TodoDTO">
+<!-- 달력 이벤트 리스트 출력 -->
+SELECT *
+FROM TODO
+WHERE modifyYN = 1
+AND userID = #{userID}
+</select>
+</mapper>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="layout/default">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body  layout:fragment="content">
+    <!-- Modal -->
+    <div class="modal fade" id="modal_input" role="dialog">
+        <div class="modal-dialog">
+
+            <!--달력 이벤트 추가-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Input Your Todo!</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form class="js-TodoForm text-center mx-auto" style="width: 400px;"
+                        action="/Reminder/calendarInsert" method="post">
+                        <!-- TodoList 입력 -->
+                        <input type="text" placeholder=" Write here!"
+                            class="form-input text form-control input-sm" name="todoinput" />
+                        <input type="date" class="form-input text form-control input-sm" name="startday"/>
+                        <input type="date" class="form-input text form-control input-sm" name="endday" />
+                        <button class="btn btn-primary pull-right">Submit</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 이벤트 클릭시 달력 이벤트 수정, 삭제 -->
+    <div class="modal fade" id="successModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Evnet</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Calendar 출력-->
+    <div id='calendar-container'>
+        <div id='calendar'></div>
+    </div>
+<link rel="stylesheet" href="/assets/css/main.css" />
+<script src="/assets/js/main.js"></script>
+<link rel="stylesheet" href="/assets/css/calendarfix.css" />
+<!-- fullCalendar API javascript 작성 -->
+<script  th:inline="javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      height: '100%',
+      expandRows: true,
+      slotMinTime: '08:00',
+      slotMaxTime: '20:00',
+      headerToolbar: {
+        left: 'prevYear,prev,next,nextYear today custom1',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      },
+      customButtons: {
+          custom1: {
+            text: 'Input',
+            click: function() {
+              $('#modal_input').modal('show');
+            }
+          }
+        },
+
+      initialView: 'dayGridMonth',
+      initialDate: new Date(),
+      navLinks: true, // can click day/week names to navigate views
+      editable: true,
+      selectable: true,
+      nowIndicator: true,
+      dayMaxEvents: true, // allow "more" link when too many events
+      events: [
+        {
+          title: `All Day Event`,
+          start: `2020-09-01`,
+          end: `2020-09-12`
+        },
+
+        /*<![CDATA[*/
+        /*[# th:each="calList : ${calendarList}"]*/
+        {
+            id : [[${calList.TodoID}]],
+            title : [[${calList.TodoContent}]],
+            start : [[${calList.TodoStartDate}]],
+            end : [[${calList.TodoEndDate}]],
+        },
+        /*[/]*/
+        /*]]>*/
+
+        ],
+        eventClick: function(event) {
+            $('#successModal .modal-body *').remove();
+            $('#successModal .modal-footer *').remove();
+            var title = event.event._def.title;
+            var ID = event.event._def.publicId;
+            var startDay = event.event._instance.range.start.toISOString();
+            var endDay =event.event._instance.range.end.toISOString();
+            startDay =getFormatDate(startDay);
+            endDay = getFormatDate(endDay);
+
+            var newEditForm =$('<form></form>');
+            newEditForm.attr("name","editTodo");
+            newEditForm.attr("method", "post");
+            newEditForm.attr("action","/Reminder/calendarUpdate");
+
+            newEditForm.append($('<input />',{type:'text', value:title, name:"todotitle"}));
+            newEditForm.append($('<input />',{type:'date', value:startDay, name:"todoStartDay"}));
+            newEditForm.append($('<input />',{type:'date', value:endDay, name:"todoEndDay"}));
+            newEditForm.append($('<input />',{type:'hidden', value:ID, name:"todoID"}));
+            newEditForm.append($('<button class="btn btn-success">Edit</button>'));
+            newEditForm.appendTo('#successModal .modal-body');
+
+
+                var newDeleteForm =$('<form></form>');
+                newDeleteForm.attr("name","deleteTodo");
+                newDeleteForm.attr("method", "post");
+                newDeleteForm.attr("action","/Reminder/calendarDelete");
+
+                newDeleteForm.append($('<input/>',{type:'hidden', value:ID, name:"todoID"}));
+                newDeleteForm.append($('<button class="btn btn-danger">Delete</button>'));
+                newDeleteForm.appendTo('#successModal .modal-footer');
+
+            var close = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>');
+            $('#successModal .modal-footer').append(close);
+            $("#successModal").modal("show");
+            }
+  });
+    calendar.render();
+  });
+
+</script>
+<!-- 달력 이벤트 수정폼에 날짜 반환 -->
+<script>
+function getFormatDate(date){
+    var pickdate = String(date);
+    var year = pickdate.substring(0,4);
+    var month = pickdate.substring(5,7);
+    var day = pickdate.substring(8,10);
+
+    return year + "-" + month + "-" + day;
+}
+</script>
+
+</body>
+</html>

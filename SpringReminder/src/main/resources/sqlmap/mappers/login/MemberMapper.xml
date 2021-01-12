@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gsitm.career.mapper.MemberMapper">
+ <insert id="memberInsert"
+  parameterType="com.gsitm.career.dto.MemberDTO">
+<!-- 계정 생성 -->
+  INSERT INTO member(
+  userID, userPassword, userName, userMail, modify_YN, creator, create_time, update_time
+  ) VALUES(
+  #{userID}
+  , #{userPassword}
+  , #{userName}
+  , #{userMail}
+  , 1
+  , #{userID}
+  , NOW()
+  , NOW()
+  )
+ </insert>
+
+ <select id="memberSearch" parameterType="String"
+  resultType="com.gsitm.career.dto.MemberDTO">
+  <!-- 로그인 시 계정 정보 찾기 -->
+  SELECT *
+  FROM member
+  WHERE userID = #{userID}
+ </select>
+</mapper>

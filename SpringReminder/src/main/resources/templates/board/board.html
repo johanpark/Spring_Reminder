@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="layout/default">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body th:if="${boardList}" >
+ <div class="container" layout:fragment="content">
+        <div>
+            <p class="display-4 text-center text-danger">Schedule Sharing</p>
+        </div>
+        <div class="row">
+            <table class="table table-striped"
+                style="text-align: center; border: 1px solid #dddddd">
+                <thead>
+                    <tr>
+                        <th style="background-color: #eeeeee; text-align: center;">번호</th>
+                        <th style="background-color: #eeeeee; text-align: left;">제목</th>
+                        <th style="background-color: #eeeeee; text-align: center;">작성자</th>
+                        <th style="background-color: #eeeeee; text-align: center;">작성일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!--  게시판 리스트 출력 -->
+                    <tr th:each="board:${boardList}">
+                        <td th:text="${board.boardID}"></td>
+                        <td class="text-left">
+                        <a th:href="@{/Reminder/detail/{boardID} (boardID=${board.boardID})}"
+                           th:text="${board.boardTitle}">
+                        </a></td>
+                        <td th:text ="${board.userID}"></td>
+                        <td th:text="${board.boardDate}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- 게시판 페이지네이션 -->
+            <div th:if="${pageNumber>1}">
+            <a th:href="'/Reminder/list?pageNumber='+${pageNumber-1}"
+                class="btn btn-success btn-arrow-left">이전</a>
+            <div style="width: 10px;"></div>
+             </div>
+            <div th:if="${pageNumber<lastPage}">
+            <a th:href="'/Reminder/list?pageNumber='+${pageNumber+1}"
+                class="btn btn-success btn-arrow-left">다음</a>
+              </div>
+       <!--로그인했을 경우에만 출력,  게시판 글 작성 -->
+            <div style="width: 10px;"></div>
+            <a th:if="${session.ID} != null" class="btn btn-outline-primary" href="/Reminder/insert"
+                role="button">Posting</a>
+        </div>
+    </div>
+</body>
+</html>
