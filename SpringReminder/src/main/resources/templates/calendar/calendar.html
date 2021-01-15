@@ -62,6 +62,7 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 <link rel="stylesheet" href="/assets/css/main.css" />
 <script src="/assets/js/main.js"></script>
 <link rel="stylesheet" href="/assets/css/calendarfix.css" />
+
 <!-- fullCalendar API javascript 작성 -->
 <script  th:inline="javascript">
   document.addEventListener('DOMContentLoaded', function() {
@@ -99,6 +100,7 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
           start: `2020-09-01`,
           end: `2020-09-12`
         },
+        //아래는 JS에서의 Thymeleaf 반복문 구조, 주석을 붙여야 작동이 된다.
 
         /*<![CDATA[*/
         /*[# th:each="calList : ${calendarList}"]*/

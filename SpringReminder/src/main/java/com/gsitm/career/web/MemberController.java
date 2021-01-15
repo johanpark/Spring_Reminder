@@ -99,7 +99,9 @@ public class MemberController {
 	@RequestMapping("/logout")
 	private String memberLogout(HttpServletRequest request, HttpServletResponse response)throws Exception{
 		HttpSession session = request.getSession();
-		session.invalidate();
+		//session.invalidate(); 이건 모든 세션을 날려버리기 때문에 삭제할 세션만 골라서 삭제
+		session.removeAttribute("ID");
+		session.removeAttribute("userName");
 		response.sendRedirect("/Reminder/main");
 		return null;
 	}
